@@ -1,0 +1,48 @@
+version: '3'
+services:
+  app:
+    container_name: nginx-proxy-manager_app
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: always
+    ports:
+      - '80:80'
+      - '127.0.0.1:81:81'
+      - '443:443'
+    env_file:
+      - .env
+    #environment:
+    #  - DB_MYSQL_HOST=db
+    #  - DB_MYSQL_PORT=3306
+    #  - DB_MYSQL_USER=nginx
+    #  - DB_MYSQL_PASSWORD=passwor
+    #  - DB_MYSQL_NAME=nginx
+    #  - TZ=Europe/Madrid
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+      - nginx-proxy-manager
+      - reverseproxy
+
+  db:
+    container_name: nginx-proxy-manager-db
+    image: 'jc21/mariadb-aria:latest'
+    restart: always
+    env_file:
+      - .env
+    #environment:
+    #  - MYSQL_DATABASE=nginx
+    #  - MYSQL_USER=nginx
+    #  - MYSQL_PASSWORD=6%yJfW%&Q2$DCAT7kc8vbTS%m
+    #  - MYSQL_ROOT_PASSWORD=cGD5LX7J#6J*9Z!7$pr5
+    #  - TZ=Europe/Madrid
+    volumes:
+      - ./mysql:/var/lib/mysql
+    networks:
+      - nginx-proxy-manager
+
+networks:
+  nginx-proxy-manager:
+    external: true
+  reverseproxy:
+    external: true
