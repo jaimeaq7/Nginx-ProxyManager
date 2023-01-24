@@ -10,6 +10,7 @@ services:
       - '443:443'
     env_file:
       - .env
+
     #environment:
     #  - DB_MYSQL_HOST=db
     #  - DB_MYSQL_PORT=3306
@@ -18,7 +19,7 @@ services:
     #  - DB_MYSQL_NAME=nginx
     #  - TZ=Europe/Madrid
     volumes:
-      - ./data:/data
+      - nginx-proxymanager-data:/data
       - ./letsencrypt:/etc/letsencrypt
     networks:
       - nginx-proxy-manager
@@ -37,7 +38,7 @@ services:
     #  - MYSQL_ROOT_PASSWORD=password
     #  - TZ=Europe/Madrid
     volumes:
-      - ./mysql:/var/lib/mysql
+      - nginx-proxymanager-mysql:/var/lib/mysql
     networks:
       - nginx-proxy-manager
 
@@ -45,4 +46,10 @@ networks:
   nginx-proxy-manager:
     external: true
   reverseproxy:
+    external: true
+
+volumes:
+  nginx-proxymanager-data:
+    external: true
+  nginx-proxymanager-mysql:
     external: true
